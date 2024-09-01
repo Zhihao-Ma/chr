@@ -9,5 +9,6 @@ use crate::APPLICATION_CONTEXT;
 pub async fn do_login(Json(arg): Json<SignInDTO>) -> impl IntoResponse {
     let sysUserService = APPLICATION_CONTEXT.get::<SysUserService>();
     let result = sysUserService.do_login(arg).await;
-    return RespVO::from_result(result).json();
+    return result;
+    // return RespVO::from_result(result).json();
 }

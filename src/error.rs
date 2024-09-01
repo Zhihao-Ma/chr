@@ -26,6 +26,12 @@ impl From<io::Error> for Error {
     }
 }
 
+impl From<&str> for Error {
+    fn from(value: &str) -> Self {
+        Error::E(value.to_string())
+    }
+}
+
 impl From<String> for Error {
     fn from(value: String) -> Self {
         Error::E(value)

@@ -1,5 +1,8 @@
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
+pub mod jwt;
+pub mod user_info;
+
 use crate::error::Error;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,6 +28,16 @@ where
         }
     }
 
+    pub fn from_error_str(error: &str) -> Self {
+        let code = String::from("500");
+
+        Self {
+            code: Some(code),
+            msg: Some(error.to_string()),
+            data: None,
+        }
+    }
+
     pub fn from_error(error: String) -> Self {
         let code = String::from("500");
 
@@ -37,5 +50,14 @@ where
 
     pub fn json(self) -> axum::Json<RespVO<T>> {
         axum::Json(self)
+    }
+}
+
+impl<T> ToString for RespVO<T>
+where
+    T: Serialize + DeserializeOwned + Clone,
+{
+    fn to_string(&self) -> String {
+        serde_json::to_string(self).unwrap()
     }
 }
